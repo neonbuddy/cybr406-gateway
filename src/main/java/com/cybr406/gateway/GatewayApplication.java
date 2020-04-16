@@ -20,17 +20,20 @@ public class GatewayApplication {
 		SpringApplication.run(GatewayApplication.class, args);
 	}
 
+	//RoutLocatorBuilder is a builder Style API, define routes, send traffic based on conditions, you can alter requests
+
+	//This bean holds all of the routes that we want to serve; application will use these to manage traffic
 	@Bean
 	public RouteLocator routeLocator(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route("example", r -> r
-						.path("/")
-						.uri("http://example.com"))
+						.path("/")			// Predicate that you want to match
+						.uri("http://example.com"))		// Destination you want request to route to if predicate matches
 				.route("account", r -> r
-						.path("/headers", "/signup", "/check-user", "/profiles/**")
-						.uri(accountUrl))
+						.path("/headers", "/signup", "/check-user", "/profiles/**")	// Send these urls to account
+						.uri(accountUrl))	// These urls will change based on enviornment
 				.route("post", r -> r
-						.path("/posts/**", "/comments/**")
+						.path("/posts/**", "/comments/**")					//Send these urls to post
 						.uri(postUrl))
 				.build();
 	}
